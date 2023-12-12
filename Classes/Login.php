@@ -1,4 +1,14 @@
 <?php
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+use Dotenv\Dotenv;
+$mail = new PHPMailer;
+$dotenv = Dotenv::createImmutable(__DIR__ . '/..');
+$dotenv->load();
+
+
+
 class Login
 {
     
@@ -342,41 +352,52 @@ class Login
     }
 
     public function sendPassword($email, $tempPass){
+
+
     
         $userEmail = $email;
-
         $subject = 'Password Reset';
-
- 
+        
         $message = "
-        <p>Dear User,</p>
-        <p>Thank you for using our website. Your password has been reset.</p>
-        <p>Your temporary password is: <strong>$tempPass</strong></p>
-        <p>Kindly replace it with a new password upon logging in</p>
-        <p>Best regards,<br>Brgy Officials</p>
-    ";
-
-        $headers = "From: Barangay Hall <noreply@brgyhall.com>\r\n";
-        $headers .= "Content-type: text/html\r\n";
-
-        ini_set("SMTP","smtp.gmail.com");
-        ini_set("smtp_port","587");
-        ini_set("sendmail_from", "miko.recare@cvsu.edu.ph");
-        ini_set('sendmail_path', 'C:\\xampp\\sendmail\\sendmail.exe -t -i'); // Adjust the path to your sendmail executable
-
-
-
-        $mailSuccess = mail($userEmail, $subject, $message, $headers);
-        if ($mailSuccess) {
+            <p>Dear User,</p>
+            <p>Thank you for using our website. Your password has been reset.</p>
+            <p>Your temporary password is: <strong>$tempPass</strong></p>
+            <p>Kindly replace it with a new password upon logging in</p>
+            <p>Best regards,<br>Brgy Officials</p>
+        ";
+        
+        $mail = new PHPMailer(true);
+        
+        try {
+            // Server settings
+            $mail->isSMTP();
+            $mail->Host       = 'smtp.gmail.com';
+            $mail->SMTPAuth   = true;
+            $mail->Username = $_ENV['GMAIL_USERNAME']; 
+            $mail->Password = $_ENV['GMAIL_PASSWORD']; 
+            $mail->SMTPSecure = 'tls';
+            $mail->Port       = 587;
+        
+            // Recipients
+            $mail->setFrom('noreply@brgyhall.com', 'Barangay Hall');
+            $mail->addAddress($userEmail);
+        
+            // Content
+            $mail->isHTML(true);
+            $mail->Subject = $subject;
+            $mail->Body    = $message;
+        
+            $mail->send();
+        
             return array(
                 'message' => 'Changed Password',
                 'status'  => 'success',
                 'login.php'
             );
-        } else {
+        } catch (Exception $e) {
             return array(
                 'error',
-                $response['message'],
+                'Error sending email: ' . $mail->ErrorInfo,
                 'admin.php'
             );
         }

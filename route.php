@@ -14,12 +14,17 @@
     include_once('loader.php');
     include_once('uploader.php');
     require 'vendor/autoload.php';
-
+    
     use Classes\Credential;
     use Classes\Db;
 
+    use Dotenv\Dotenv;
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\Exception;
+
+    $dotenv = Dotenv::createImmutable(__DIR__);
+    $dotenv->load();
+
     $mail = new PHPMailer;
 
     $credential = new Credential();
@@ -524,8 +529,8 @@
             // SMTP settings
             $mail->Host = 'smtp.gmail.com';
             $mail->SMTPAuth = true;
-            $mail->Username = 'miko.recare@cvsu.edu.ph'; 
-            $mail->Password = 'password'; 
+            $mail->Username = $_ENV['GMAIL_USERNAME']; 
+            $mail->Password = $_ENV['GMAIL_PASSWORD']; 
             $mail->SMTPSecure = 'tls';
             $mail->Port = 587;
     
