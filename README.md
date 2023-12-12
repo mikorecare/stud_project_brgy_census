@@ -1,1 +1,7 @@
-# stud_project_brgy_census
+Install Composer
+
+Open CMD go to the root folder
+
+RUN `composer install`
+
+change the `.env` file
