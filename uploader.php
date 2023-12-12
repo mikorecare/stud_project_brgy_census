@@ -1,8 +1,13 @@
 <?php
-    function upload($file) {
+    function upload($file, $isAvatar) {
     $target_dir = './uploads/';
     $file_extension = array_reverse(explode(".", basename($file["name"])))[0];
     $file_name = "avatar_" . microtime() . "." . $file_extension;
+    if ($isAvatar) {
+        $file_name = "avatar_" . microtime() . "." . $file_extension;
+    } else {
+        $file_name = "id_url_" . microtime() . "." . $file_extension;
+    }
     $target_file = $target_dir . $file_name;
     $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
 
@@ -24,7 +29,7 @@
     }
 
     // Check file size
-    if ($file["size"] > 2000000) {
+    if ($file["size"] > 9999999) {
         return array(
         "message" => "File is too large.",
         "status" => "error"

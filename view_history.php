@@ -1,5 +1,5 @@
 <?php
-$user = $objModel->getViewHistory(isset($_GET['id']) ? $_GET['id'] : '');
+$user = $objModel->getViewHistoryAdmin(isset($_GET['id']) ? $_GET['id'] : '');
 ?>
 
 <div class="container-fluid p-3" style="height: 100vh; overflow: scroll;">
@@ -100,7 +100,7 @@ $user = $objModel->getViewHistory(isset($_GET['id']) ? $_GET['id'] : '');
                     <div class="row">
                         <div class="col-md-2">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="Single" <?= $user['civil_status'] == 'Single' ? 'checked' : 'disabled'; ?>>
+                                <input class="form-check-input" type="checkbox" value="Single" <?= $user['civil_status'] == 'SINGLE' ? 'checked' : 'disabled'; ?>>
                                 <label class="form-check-label" for="flexCheckDefault">
                                     Single
                                 </label>
@@ -108,7 +108,7 @@ $user = $objModel->getViewHistory(isset($_GET['id']) ? $_GET['id'] : '');
                         </div>
                         <div class="col-md-2">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="Married" <?= $user['civil_status'] == 'Married' ? 'checked' : 'disabled'; ?>>
+                                <input class="form-check-input" type="checkbox" value="Married" <?= $user['civil_status'] == 'MARRIED' ? 'checked' : 'disabled'; ?>>
                                 <label class="form-check-label" for="flexCheckDefault">
                                     Married
                                 </label>
@@ -116,7 +116,7 @@ $user = $objModel->getViewHistory(isset($_GET['id']) ? $_GET['id'] : '');
                         </div>
                         <div class="col-md-2">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="Widow/er" <?= $user['civil_status'] == 'Widow/er' ? 'checked' : 'disabled'; ?>>
+                                <input class="form-check-input" type="checkbox" value="Widow/er" <?= $user['civil_status'] == 'WIDOW/ER' ? 'checked' : 'disabled'; ?>>
                                 <label class="form-check-label" for="flexCheckDefault">
                                     Widow/er
                                 </label>
@@ -124,7 +124,7 @@ $user = $objModel->getViewHistory(isset($_GET['id']) ? $_GET['id'] : '');
                         </div>
                         <div class="col-md-2">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="Separated" <?= $user['civil_status'] == 'Separated' ? 'checked' : 'disabled'; ?>>
+                                <input class="form-check-input" type="checkbox" value="Separated" <?= $user['civil_status'] == 'SEPARATED' ? 'checked' : 'disabled'; ?>>
                                 <label class="form-check-label" for="flexCheckDefault">
                                     Separated
                                 </label>
@@ -142,7 +142,7 @@ $user = $objModel->getViewHistory(isset($_GET['id']) ? $_GET['id'] : '');
                     <div class="row">
                         <div class="col-md-3">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="Female" <?= $user['sex'] == 'Female' ? 'checked' : 'disabled'; ?>>
+                                <input class="form-check-input" type="checkbox" value="Female" <?= $user['sex'] == 'FEMALE' ? 'checked' : 'disabled'; ?>>
                                 <label class="form-check-label" for="flexCheckDefault">
                                     Female
                                 </label>
@@ -150,7 +150,7 @@ $user = $objModel->getViewHistory(isset($_GET['id']) ? $_GET['id'] : '');
                         </div>
                         <div class="col-md-3">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="Male" <?= $user['sex'] == 'Male' ? 'checked' : 'disabled'; ?>>
+                                <input class="form-check-input" type="checkbox" value="Male" <?= $user['sex'] == 'MALE' ? 'checked' : 'disabled'; ?>>
                                 <label class="form-check-label" for="flexCheckDefault">
                                     Male
                                 </label>
@@ -257,10 +257,10 @@ $user = $objModel->getViewHistory(isset($_GET['id']) ? $_GET['id'] : '');
                         </div>
 
                         <div class="col-md-5">
-                            <input type="text" class="form-control" value="<?= $objModel->parseData($user['education_attainment'])->school[0] ?>" readonly />
+                            <input type="text" class="form-control" value="<?= $objModel->parseData($user['education_attainment'])->SCHOOL[0] ?>" readonly />
                         </div>
                         <div class="col-md-5">
-                            <input type="text" class="form-control" value="<?= $objModel->parseData($user['education_attainment'])->school_address[0] ?>" readonly />
+                            <input type="text" class="form-control" value="<?= $objModel->parseData($user['education_attainment'])->SCHOOL_ADDRESS[0] ?>" readonly />
                         </div>
                     </div>
                     <div class="row mb-2">
@@ -268,10 +268,10 @@ $user = $objModel->getViewHistory(isset($_GET['id']) ? $_GET['id'] : '');
                             <strong>High School</strong>
                         </div>
                         <div class="col-md-5">
-                            <input type="text" class="form-control" value="<?= $objModel->parseData($user['education_attainment'])->school[1] ?>" readonly />
+                            <input type="text" class="form-control" value="<?= $objModel->parseData($user['education_attainment'])->SCHOOL[1] ?>" readonly />
                         </div>
                         <div class="col-md-5">
-                            <input type="text" class="form-control" value="<?= $objModel->parseData($user['education_attainment'])->school_address[1] ?>" readonly />
+                            <input type="text" class="form-control" value="<?= $objModel->parseData($user['education_attainment'])->SCHOOL_ADDRESS[1] ?>" readonly />
                         </div>
                     </div>
                     <div class="row mb-2">
@@ -279,10 +279,10 @@ $user = $objModel->getViewHistory(isset($_GET['id']) ? $_GET['id'] : '');
                             <strong>Vocational Course</strong>
                         </div>
                         <div class="col-md-5">
-                            <input type="text" class="form-control" value="<?= $objModel->parseData($user['education_attainment'])->school[2] ?>" readonly />
+                            <input type="text" class="form-control" value="<?= $objModel->parseData($user['education_attainment'])->SCHOOL[2] ?>" readonly />
                         </div>
                         <div class="col-md-5">
-                            <input type="text" class="form-control" value="<?= $objModel->parseData($user['education_attainment'])->school_address[2] ?>" readonly />
+                            <input type="text" class="form-control" value="<?= $objModel->parseData($user['education_attainment'])->SCHOOL_ADDRESS[2] ?>" readonly />
                         </div>
                     </div>
 
@@ -291,10 +291,10 @@ $user = $objModel->getViewHistory(isset($_GET['id']) ? $_GET['id'] : '');
                             <strong>College/Course</strong>
                         </div>
                         <div class="col-md-5">
-                            <input type="text" class="form-control" value="<?= $objModel->parseData($user['education_attainment'])->school[3] ?>" readonly />
+                            <input type="text" class="form-control" value="<?= $objModel->parseData($user['education_attainment'])->SCHOOL[3] ?>" readonly />
                         </div>
                         <div class="col-md-5">
-                            <input type="text" class="form-control" value="<?= $objModel->parseData($user['education_attainment'])->school_address[3] ?>" readonly />
+                            <input type="text" class="form-control" value="<?= $objModel->parseData($user['education_attainment'])->SCHOOL_ADDRESS[3] ?>" readonly />
                         </div>
                     </div>
                 </div>
@@ -325,15 +325,15 @@ $user = $objModel->getViewHistory(isset($_GET['id']) ? $_GET['id'] : '');
                         ?>
 
                                 <div class="col-md-4">
-                                    <input type="text" class="form-control" value="<?= $objModel->parseData($user['emp_record'])->duration[$i] ?>" readonly />
+                                    <input type="text" class="form-control" value="<?= $objModel->parseData($user['emp_record'])->DURATION[$i] ?>" readonly />
                                 </div>
 
                                 <div class="col-md-4">
-                                    <input type="text" class="form-control" value="<?= $objModel->parseData($user['emp_record'])->name_of_emp[$i] ?>" readonly />
+                                    <input type="text" class="form-control" value="<?= $objModel->parseData($user['emp_record'])->NAME_OF_EMP[$i] ?>" readonly />
                                 </div>
 
                                 <div class="col-md-4">
-                                    <input type="text" class="form-control" value="<?= $objModel->parseData($user['emp_record'])->house_occu[$i] ?>" readonly />
+                                    <input type="text" class="form-control" value="<?= $objModel->parseData($user['emp_record'])->HOUSE_OCCU[$i] ?>" readonly />
                                 </div>
                         <?php
                             endif;
@@ -348,15 +348,15 @@ $user = $objModel->getViewHistory(isset($_GET['id']) ? $_GET['id'] : '');
                         ?>
 
                                 <div class="col-md-4">
-                                    <input type="text" class="form-control" value="<?= $objModel->parseData($user['emp_record'])->duration[$i] ?>" readonly />
+                                    <input type="text" class="form-control" value="<?= $objModel->parseData($user['emp_record'])->DURATION[$i] ?>" readonly />
                                 </div>
 
                                 <div class="col-md-4">
-                                    <input type="text" class="form-control" value="<?= $objModel->parseData($user['emp_record'])->name_of_emp[$i] ?>" readonly />
+                                    <input type="text" class="form-control" value="<?= $objModel->parseData($user['emp_record'])->NAME_OF_EMP[$i] ?>" readonly />
                                 </div>
 
                                 <div class="col-md-4">
-                                    <input type="text" class="form-control" value="<?= $objModel->parseData($user['emp_record'])->house_occu[$i] ?>" readonly />
+                                    <input type="text" class="form-control" value="<?= $objModel->parseData($user['emp_record'])->HOUSE_OCCU[$i] ?>" readonly />
                                 </div>
                         <?php
                             endif;
@@ -371,15 +371,15 @@ $user = $objModel->getViewHistory(isset($_GET['id']) ? $_GET['id'] : '');
                         ?>
 
                                 <div class="col-md-4">
-                                    <input type="text" class="form-control" value="<?= $objModel->parseData($user['emp_record'])->duration[$i] ?>" readonly />
+                                    <input type="text" class="form-control" value="<?= $objModel->parseData($user['emp_record'])->DURATION[$i] ?>" readonly />
                                 </div>
 
                                 <div class="col-md-4">
-                                    <input type="text" class="form-control" value="<?= $objModel->parseData($user['emp_record'])->name_of_emp[$i] ?>" readonly />
+                                    <input type="text" class="form-control" value="<?= $objModel->parseData($user['emp_record'])->NAME_OF_EMP[$i] ?>" readonly />
                                 </div>
 
                                 <div class="col-md-4">
-                                    <input type="text" class="form-control" value="<?= $objModel->parseData($user['emp_record'])->house_occu[$i] ?>" readonly />
+                                    <input type="text" class="form-control" value="<?= $objModel->parseData($user['emp_record'])->HOUSE_OCCU[$i] ?>" readonly />
                                 </div>
                         <?php
                             endif;
@@ -417,104 +417,104 @@ $user = $objModel->getViewHistory(isset($_GET['id']) ? $_GET['id'] : '');
                     </div>
                     <div class="row mb-2">
                         <div class="col-md-2">
-                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->ho_name[0] ?>">
+                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->HO_NAME[0] ?>">
                         </div>
                         <div class="col-md-2">
-                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->ho_fam_position[0] ?>">
+                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->HO_FAM_POSITION[0] ?>">
                         </div>
                         <div class="col-md-2">
-                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->ho_age[0] ?>">
+                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->HO_AGE[0] ?>">
                         </div>
                         <div class="col-md-2">
-                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->ho_dob[0] ?>">
+                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->HO_DOB[0] ?>">
                         </div>
                         <div class="col-md-2">
-                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->ho_civil_status[0] ?>">
+                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->HO_CIVIL_STATUS[0] ?>">
                         </div>
                         <div class="col-md-2">
-                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->ho_occu_company[0] ?>">
-                        </div>
-                    </div>
-                    <div class="row mb-2">
-                        <div class="col-md-2">
-                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->ho_name[1] ?>">
-                        </div>
-                        <div class="col-md-2">
-                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->ho_fam_position[1] ?>">
-                        </div>
-                        <div class="col-md-2">
-                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->ho_age[1] ?>">
-                        </div>
-                        <div class="col-md-2">
-                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->ho_dob[1] ?>">
-                        </div>
-                        <div class="col-md-2">
-                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->ho_civil_status[1] ?>">
-                        </div>
-                        <div class="col-md-2">
-                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->ho_occu_company[1] ?>">
+                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->HO_OCCU_COMPANY[0] ?>">
                         </div>
                     </div>
                     <div class="row mb-2">
                         <div class="col-md-2">
-                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->ho_name[2] ?>">
+                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->HO_NAME[1] ?>">
                         </div>
                         <div class="col-md-2">
-                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->ho_fam_position[2] ?>">
+                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->HO_FAM_POSITION[1] ?>">
                         </div>
                         <div class="col-md-2">
-                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->ho_age[2] ?>">
+                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->HO_AGE[1] ?>">
                         </div>
                         <div class="col-md-2">
-                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->ho_dob[2] ?>">
+                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->HO_DOB[1] ?>">
                         </div>
                         <div class="col-md-2">
-                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->ho_civil_status[2] ?>">
+                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->HO_CIVIL_STATUS[1] ?>">
                         </div>
                         <div class="col-md-2">
-                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->ho_occu_company[2] ?>">
+                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->HO_OCCU_COMPANY[1] ?>">
                         </div>
                     </div>
-
                     <div class="row mb-2">
                         <div class="col-md-2">
-                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->ho_name[3] ?>">
+                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->HO_NAME[2] ?>">
                         </div>
                         <div class="col-md-2">
-                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->ho_fam_position[3] ?>">
+                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->HO_FAM_POSITION[2] ?>">
                         </div>
                         <div class="col-md-2">
-                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->ho_age[3] ?>">
+                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->HO_AGE[2] ?>">
                         </div>
                         <div class="col-md-2">
-                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->ho_dob[3] ?>">
+                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->HO_DOB[2] ?>">
                         </div>
                         <div class="col-md-2">
-                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->ho_civil_status[3] ?>">
+                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->HO_CIVIL_STATUS[2] ?>">
                         </div>
                         <div class="col-md-2">
-                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->ho_occu_company[3] ?>">
+                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->HO_OCCU_COMPANY[2] ?>">
                         </div>
                     </div>
 
                     <div class="row mb-2">
                         <div class="col-md-2">
-                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->ho_name[4] ?>">
+                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->HO_NAME[3] ?>">
                         </div>
                         <div class="col-md-2">
-                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->ho_fam_position[4] ?>">
+                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->HO_FAM_POSITION[3] ?>">
                         </div>
                         <div class="col-md-2">
-                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->ho_age[4] ?>">
+                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->HO_AGE[3] ?>">
                         </div>
                         <div class="col-md-2">
-                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->ho_dob[4] ?>">
+                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->HO_DOB[3] ?>">
                         </div>
                         <div class="col-md-2">
-                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->ho_civil_status[4] ?>">
+                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->HO_CIVIL_STATUS[3] ?>">
                         </div>
                         <div class="col-md-2">
-                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->ho_occu_company[4] ?>">
+                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->HO_OCCU_COMPANY[3] ?>">
+                        </div>
+                    </div>
+
+                    <div class="row mb-2">
+                        <div class="col-md-2">
+                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->HO_NAME[4] ?>">
+                        </div>
+                        <div class="col-md-2">
+                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->HO_FAM_POSITION[4] ?>">
+                        </div>
+                        <div class="col-md-2">
+                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->HO_AGE[4] ?>">
+                        </div>
+                        <div class="col-md-2">
+                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->HO_DOB[4] ?>">
+                        </div>
+                        <div class="col-md-2">
+                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->HO_CIVIL_STATUS[4] ?>">
+                        </div>
+                        <div class="col-md-2">
+                            <input readonly type="text" class="form-control" value="<?= $objModel->parseData($user['house_occupants'])->HO_OCCU_COMPANY[4] ?>">
                         </div>
                     </div>
                 </div>
@@ -527,7 +527,7 @@ $user = $objModel->getViewHistory(isset($_GET['id']) ? $_GET['id'] : '');
                 <div class="card-body">
 
                     <?php foreach ($objModel->getJobs() as $job) : ?>
-                        <?php if ($objModel->parseData($user['occupations'])->job_id == $job['job_id']) : ?>
+                        <?php if ($objModel->parseData($user['occupations'])->JOB_ID == $job['job_id']) : ?>
                             <div class="form-check">
                                 <input class="form-check-input" checked type="checkbox">
                                 <label class="form-check-label" for="flexCheckDefault">
@@ -536,20 +536,6 @@ $user = $objModel->getViewHistory(isset($_GET['id']) ? $_GET['id'] : '');
                             </div>
                         <?php endif; ?>
                     <?php endforeach; ?>
-
-                    <?php if (!empty($objModel->parseData($user['occupations'])->other)) : ?>
-                        <div id="custom-size" class="col-md-2 d-flex" style="gap: 3px; align-items: center; justify-content:left;">
-                            <div class="form-check">
-                                <input <?= !empty($objModel->parseData($user['occupations'])->other) ? 'checked' : 'disbaled'; ?> id="select_other" class="form-check-input" type="checkbox" value="other">
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    Other
-                                </label>
-                            </div>
-                            <?php if (!empty($objModel->parseData($user['occupations'])->other)) : ?>
-                                <input type="text" id="showOtherInput" class="form-control" value="<?= $objModel->parseData($user['occupations'])->other; ?>" readonly>
-                            <?php endif; ?>
-                        </div>
-                    <?php endif; ?>
                 </div>
             </div>
 

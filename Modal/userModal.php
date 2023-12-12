@@ -24,6 +24,10 @@
             <input type="text" id="fName" name="fName" class="form-control" required value="<?= isset($userData['f_name']) ? $userData['f_name'] : '' ?>" />
           </div>
           <div class="mb-3">
+            <label for="fName" class="form-label">Middle Name</label>
+            <input type="text" id="mName" name="mName" class="form-control" required value="<?= isset($userData['m_name']) ? $userData['m_name'] : '' ?>" />
+          </div>
+          <div class="mb-3">
             <label for="lName" class="form-label">Last Name</label>
             <input type="text" id="lName" name="lName" class="form-control" required value="<?= isset($userData['l_name']) ? $userData['l_name'] : '' ?>" />
           </div>

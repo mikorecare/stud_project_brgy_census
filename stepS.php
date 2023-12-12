@@ -3,9 +3,6 @@
     <hr>
     <div class="card-body">
         <!-- <pre>
-            <?php
-            print_r($_SESSION['step1']);
-            ?>
         </pre> -->
         <style>
             .conatiner-jobs {

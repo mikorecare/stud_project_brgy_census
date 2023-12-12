@@ -67,6 +67,8 @@
   }
 }
 
+
+
 body {
   margin: 0;
   font-family: var(--bs-body-font-family);
@@ -11445,6 +11447,25 @@ textarea.form-control-lg {
   width: 15rem;
 }
 
+/* Vendor prefixes added for better cross-browser compatibility */
+#sidebar-wrapper {
+  transition: margin 0.25s ease-out;
+  -webkit-transition: margin 0.25s ease-out;
+  -moz-transition: margin 0.25s ease-out;
+  -o-transition: margin 0.25s ease-out;
+}
+
+#sidebar-wrapper .sidebar-heading {
+  -webkit-padding-start: 1.25rem;
+  -moz-padding-start: 1.25rem;
+  padding: 0.875rem 1.25rem;
+  font-size: 1.2rem;
+}
+
+#sidebar-wrapper .list-group {
+  width: 15rem;
+}
+
 #page-content-wrapper {
   min-width: 100vw;
 }
@@ -11497,4 +11518,14 @@ a {
   body.sb-sidenav-toggled #wrapper #sidebar-wrapper {
     margin-left: -15rem;
   }
+}
+
+
+.required-field {
+  color: red;  
+  margin-right: 4px; 
+}
+
+label.required-field::before {
+display: inline-block;
 }

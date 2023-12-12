@@ -3,6 +3,7 @@
 
 <head>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="icon" href="./uploads/new_logo.ico" type="image/x-icon">
 </head>
 
 <body>
@@ -10,10 +11,17 @@
     session_start();
     require_once 'Classes/Credential.php';
     require_once 'Classes/Db.php';
-    include('loader.php');
-
+    include_once('loader.php');
+    include_once('uploader.php');
+    require 'vendor/autoload.php';
+    require 'get_oauth_token.php';
     use Classes\Credential;
     use Classes\Db;
+
+    use PHPMailer\PHPMailer\PHPMailer;
+    use PHPMailer\PHPMailer\Exception;
+    use League\OAuth2\Client\Provider\Google;
+    $mail = new PHPMailer;
 
     $credential = new Credential();
     $db   = new Db();
@@ -22,6 +30,30 @@
     $loginObj   = new Login($conn);
     $settingObj = new Settings($conn);
     $objModel   = new Model($conn);
+   
+    $refreshToken = getRefreshToken();
+
+    // Now, you can use $refreshToken as needed in route.php
+    echo 'Refresh Token in route.php: ', $refreshToken; 
+    
+    function UploaderFileTest($file)
+    {
+        
+        $fileUpload = '';
+        if (!empty($file)) {
+         
+
+            $fileUpload = upload($_FILES['file'],true);
+
+            if ($fileUpload['status'] == 'success') {
+                return $fileUpload['avatar'];
+            } else {
+                print_r($fileUpload['message']);
+            }
+            die();
+        }
+        return '';
+    }
 
     if (isset($_SESSION['user_id'])) {
         $userData = $loginObj->showUser($_SESSION['user_id']);
@@ -50,6 +82,28 @@
         die();
     }
 
+    if(isset($_GET['addJob'])){
+
+        $response = $objModel->addJobs($_GET['addJob']);
+
+        if ($response['status'] == 'success') {
+            url(
+                'success',
+                $response['message'],
+                'admin.php?page=a_jobs'
+            );
+            unset( $_SESSION['step1']);
+        } else {
+            url(
+                'error',
+                $response['message'],
+                'admin.php?page=a_jobs'
+            );
+        }
+        die();
+
+    }
+
     if (isset($_POST['manageJobs'])) 
     {
         $response = $objModel->saveJobs($_POST);
@@ -72,38 +126,161 @@
     }
 
     if (isset($_POST['routeStep1'])) {
-
+        unset( $_SESSION['step1']);
         unset($_POST['routeStep1']);
 
         $_SESSION['step1'] = $_POST;
 
-        header("Location: admin.php?step=step-2");
-        die();
+        $currentYear = strtotime($objModel->getViewHistory($userData['user_id'])['form_date_created']);
+
+        if(date('Y',$currentYear)==date('Y')){
+            $formId = $objModel->getViewHistory($userData['user_id'])['form_id'];
+            $response = $objModel->updateData(
+                $formId,
+                $_SESSION['step1'],   
+            );
+            // print_r($_SESSION['step1']);
+            // print_r($_GET);
+    
+            if ($response['status'] == 'success') {
+                if($_SESSION['step1']['isSave']== "TRUE"){
+                    url(
+                        $response['status'],
+                        $response['message'],
+                        'admin.php'
+                    );
+                    unset( $_SESSION['step1']);
+                }
+                else{
+                    header("Location: admin.php?step=step-2");
+                    die();
+                }
+            } else {
+                print_r($response['message']);
+                url(
+                    $response['status'],
+                    $response['message'],
+                    'admin.php'
+                );
+            }
+            die();
+        }
+        else{
+            $response = $objModel->saveDataFroms(uniqid(), $_SESSION['step1'], $userData['user_id']);
+            if ($response['status'] == 'success') {
+                if($_SESSION['step1']['isSave']== "TRUE"){
+                    url(
+                        $response['status'],
+                        $response['message'],
+                        'admin.php'
+                    );
+                    unset( $_SESSION['step1']);
+                }
+                else{
+                    header("Location: admin.php?step=step-2");
+                    die();
+                }
+            } else {
+                print_r($response['message']);
+                url(
+                    $response['status'],
+                    $response['message'],
+                    'admin.php'
+                );
+            }
+            die();
+        }
+
+
+     
+    
     }
 
-    if (isset($_GET['doneSteps'])) {
+    if(isset($_GET['sendEmail'])){
+        
+        $userEmail = 'user@yopmail.com';
 
-        $response = $objModel->saveDataFroms(
-            $_GET['doneSteps'],
-            $_SESSION['step1'],
-            $userData['user_id']
-        );
+        $subject = 'Registration approval';
 
-        if ($response['status'] == 'success') {
-            url(
-                $response['status'],
-                $response['message'],
-                'admin.php'
-            );
-            unset( $_SESSION['step1']);
+ 
+        $message = "
+            <p>Dear User,</p>
+            <p>Thank you for registering with our website. Your account has been approved</p>
+            <p>If you did not register on our website, you can safely ignore this email.</p>
+            <p>Best regards,<br>Brgy Officials</p>
+        ";
+
+        $headers = "From: Barangay Hall <noreply@brgyhall.com>\r\n";
+        $headers .= "Content-type: text/html\r\n";
+
+        ini_set("SMTP","smtp.gmail.com");
+        ini_set("smtp_port","587");
+        ini_set("sendmail_from", "miko.recare@cvsu.edu.ph");
+        ini_set('sendmail_path', 'C:\\xampp\\sendmail\\sendmail.exe -t -i'); // Adjust the path to your sendmail executable
+
+
+
+        $mailSuccess = mail($userEmail, $subject, $message, $headers);
+        if ($mailSuccess) {
+            echo 'Email sent successfully.';
         } else {
-            url(
-                $response['status'],
-                $response['message'],
-                'admin.php'
-            );
+            $e=error_get_last();
+            echo $e['message'];
         }
-        die();
+    }
+
+
+
+    if (isset($_GET['doneSteps'])) {
+        $currentYear = strtotime($objModel->getViewHistory($userData['user_id'])['form_date_created']);
+        print_r(date('Y'));
+
+
+        if(date('Y',$currentYear)==date('Y')){
+            $formId = $objModel->getViewHistory($userData['user_id'])['form_id'];
+            $response = $objModel->updateData(
+                $formId,
+                $_SESSION['step1'],   
+            );
+            // print_r($_SESSION['step1']);
+            // print_r($_GET);
+    
+            if ($response['status'] == 'success') {
+                url(
+                    $response['status'],
+                    $response['message'],
+                    'admin.php'
+                );
+                unset( $_SESSION['step1']);
+            } else {
+                url(
+                    $response['status'],
+                    $response['message'],
+                    'admin.php'
+                );
+            }
+            die();
+        }
+        else{
+            $response = $objModel->saveDataFroms(uniqid(), $_SESSION['step1'], $userData['user_id']);
+            if ($response['status'] == 'success') {
+                url(
+                    $response['status'],
+                    $response['message'],
+                    'admin.php'
+                );
+                unset( $_SESSION['step1']);
+            } else {
+                url(
+                    $response['status'],
+                    $response['message'],
+                    'admin.php'
+                );
+            }
+            die();
+        }
+
+     
     }
 
 
@@ -112,7 +289,7 @@
         $file = '';
 
         if ($_FILES['file']['error'] != 4) {
-            $file = uploaderFile($_FILES['file']['name']);
+            $file = UploaderFileTest($_FILES['file']['name']);
         }
 
         $response = $aucObj->manageAuction(
@@ -139,7 +316,6 @@
     }
 
     if (isset($_POST['signup'])) {
-
         if ($_POST['confirmpass'] != $_POST['password']) {
             url(
                 'warning',
@@ -149,14 +325,25 @@
             die();
         }
 
-        $response = $loginObj->signup($_POST);
+        $usernameExists = $loginObj->checkUsernameExists($_POST['username']);
+        if ($usernameExists) {
+            url(
+                'error',
+                'Username already exists. Please choose a different username.',
+                'index.php?page=signup'
+            );
+            die();
+        }
+
+        $response = $loginObj->signup($_POST,$_FILES);
+        
 
         if ($response['status'] == 'success') {
-
+            $objModel->saveDataFroms(uniqid(),$response['data'],$response['id']);
             url(
                 'success',
                 $response['message'],
-                'index.php?page=signup'
+                'index.php?page=login'
             );
         } else {
             url(
@@ -168,7 +355,29 @@
         die();
     }
 
+    if(isset($_POST['changename'])){
+        unset($_POST['changename']);
+        $response = $objModel->changeName($_POST,$_FILES);
+
+        if ($response['status'] == 'success') {
+            url(
+                'success',
+                $response['message'],
+                'admin.php'
+            );
+        } else {
+            url(
+                'error',
+                $response['message'],
+                'admin.php'
+            );
+        }
+        die();
+
+    }
+
     if (isset($_POST['login'])) {
+
         $response = $loginObj->loginForm(
             $_POST
         );
@@ -196,6 +405,36 @@
         die();
     }
 
+    if (isset($_POST['forgot_password'])) {
+
+        $response = $loginObj->forgotPassword(
+            $_POST
+        );
+
+
+        if ($response['status'] == 'success') {
+            url(
+                'success',
+                'Password change success, Please check your inbox',
+                'index.php'
+            );
+        } elseif ($response['status'] == 'warning') {
+            url(
+                'warning',
+                $response['message'],
+                'index.php'
+            );
+        } else {
+
+            url(
+                'error',
+                $response['message'],
+                'index.php'
+            );
+        }
+        die();
+    }
+
     if (isset($_POST['updateAccount'])) {
         if ($_POST['newPassword'] != $_POST['cPassword']) {
             url(
@@ -206,10 +445,12 @@
             die();
         }
 
+        // print_r($_POST);
+
         $file = '';
 
         if ($_FILES['file']['error'] != 4) {
-            $file = uploaderFile($_FILES['file']['name']);
+            $file = UploaderFileTest($_FILES['file']['name']);
         }
 
         $response = $loginObj->changePassAction(
@@ -245,7 +486,7 @@
         $file = '';
 
         if ($_FILES['file']['error'] != 4) {
-            $file = uploaderFile($_FILES['file']['name']);
+            $file = UploaderFileTest($_FILES['file']['name']);
         }
 
         $response = $loginObj->manageUser(
@@ -253,16 +494,18 @@
             $file
         );
 
-        if ($response['status'] == 'success') {
+        if($response=='success'){
+            $objModel->saveDataFroms(uniqid(),$response['data'],$response['id']);
             url(
                 'success',
-                $response['message'],
+                'Created User Successfully',
                 'admin.php?page=a_users'
             );
-        } else {
+        }
+        else{
             url(
-                'error',
-                $response['message'],
+                'success',
+                'Updated successfully',
                 'admin.php?page=a_users'
             );
         }
@@ -275,21 +518,96 @@
             $_GET['id'],
             $_GET['onApprovalUser']
         );
+    
+        if ($response['status'] == 'success') {
+    
+            $userEmail = $_GET['email'];
+            $subject = 'Registration approval';
+    
+            $mail = new PHPMailer;
+    
+            $mail->AuthType = 'XOAUTH2';
+            $mail->oauthUserEmail = 'miko.recare@cvsu.edu.ph'; // Your Gmail email
+            $mail->oauthClientId = '643320938803-9osuqe0eekq5d1fgn1mjur22jbhle2qh.apps.googleusercontent.com'; // Client ID from the Google Cloud Console
+            $mail->oauthClientSecret = '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'; // Client Secret from the Google Cloud Console
+            $mail->oauthRefreshToken = 'your_refresh_token'; // Refresh Token obtained during OAuth 2.0 authorization process
+    
+            $mail->isSMTP();
+    
+            // SMTP settings
+            $mail->Host = 'smtp.gmail.com';
+            $mail->SMTPAuth = true;
+            $mail->Username = 'miko.recare@cvsu.edu.ph'; 
+            $mail->Password = ''; 
+            $mail->SMTPSecure = 'tls';
+            $mail->Port = 587;
+    
+            $mail->setFrom('noreply@brgyhall.com', 'Barangay Hall');
+            $mail->addAddress($userEmail);
+    
+            $mail->Subject = $subject;
+    
+            if ($_GET['onApprovalUser'] == 1) {
+                $mail->Body = "
+                    <p>Dear User,</p>
+                    <p>Thank you for registering with our website. Your account has been approved.</p>
+                    <p>If you did not register on our website, you can safely ignore this email.</p>
+                    <p>Best regards,<br>Brgy Officials</p>
+                ";
+            } elseif ($_GET['onApprovalUser'] == 2) {
+                // Rejected message
+                $mail->Body = "
+                    <p>Dear User,</p>
+                    <p>We regret to inform you that your registration has been rejected due to lack of information or invalid ID.</p>
+                    <p>If you believe this is an error, please contact us for further assistance.</p>
+                    <p>Best regards,<br>Brgy Officials</p>
+                ";
+            }
+    
+            // Set content type
+            $mail->isHTML(true);
+    
+            // Send the email
+            if ($mail->send()) {
+                url('success', $response['message'], 'admin.php?page=a_users');
+            } else {
+                url('error', 'Error sending email: ' . $mail->ErrorInfo, 'admin.php?page=a_users');
+            }
+    
+        } else {
+            url('error', $response['message'], 'admin.php?page=a_users');
+        }
+    
+        die();
+    }
+    
+
+    
+
+    if(isset($_GET['onApprovalName'])){
+      
+        $response = $objModel->onApprovalName(
+            $_GET['id'],
+            $_GET['onApprovalName'],
+            $_GET['names']
+        );
 
         if ($response['status'] == 'success') {
             url(
                 'success',
                 $response['message'],
-                'admin.php?page=a_users'
+                'admin.php?page=a_tickets'
             );
         } else {
             url(
                 'error',
                 $response['message'],
-                'admin.php?page=a_users'
+                'admin.php?page=a_tickets'
             );
         }
         die();
+
+            
     }
 
     if (isset($_GET['destroyUser'])) {
@@ -317,7 +635,7 @@
     if (isset($_POST['updateLogo'])) {
         $file = '';
 
-        $file = uploaderFile($_FILES['file']['name']);
+        $file = UploaderFileTest($_FILES['file']['name']);
 
         $response = $settingObj->updateLogo(
             $file,
@@ -368,47 +686,13 @@
         die();
     }
 
-    function uploaderDocument($file)
-    {
-        $fileUpload = '';
-        if (!empty($file)) {
-            include('uploaderDoc.php');
-
-            $fileUpload = upload($_FILES['file'], './uploads/');
-
-            if ($fileUpload['status'] == 'success') {
-                return $fileUpload['avatar'];
-            } else {
-                print_r($fileUpload['message']);
-            }
-            die();
-        }
-        return '';
-    }
-
-    function uploaderFile($file)
-    {
-        $fileUpload = '';
-        if (!empty($file)) {
-            include('uploader.php');
-
-            $fileUpload = upload($_FILES['file'], './uploads/');
-
-            if ($fileUpload['status'] == 'success') {
-                return $fileUpload['avatar'];
-            } else {
-                print_r($fileUpload['message']);
-            }
-            die();
-        }
-        return '';
-    }
+ 
 
 
     if (isset($_POST['editDocument'])) {
         $file = '';
 
-        $file = uploaderDocument($_FILES['file']['name']);
+        $file = UploaderFileTest($_FILES['file']['name']);
         $response = $catObj->editDocs(
             $_POST,
             $file
@@ -442,7 +726,7 @@
         }
         $file = '';
 
-        $file = uploaderDocument($_FILES['file']['name']);
+        $file = UploaderFileTestTest($_FILES['file']['name']);
 
         $response = $catObj->newCategory(
             $_POST,

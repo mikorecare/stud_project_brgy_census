@@ -5,10 +5,12 @@ $modalRoute = 'admin.php?page=a_jobs'; ?>
 <div class="container-fluid pt-3">
     <div class="card">
         <div class="card-header">
-            <div class="row">
-                <div class="col mt-2">
+            <div class="row" >
+                <div class="col mt-2" style="display:flex; flex-direction:row; justify-content:space-between">
                     JOB LISTS
+                    <button class="btn btn-success" onclick="addJob()">ADD NEW JOB</button>
                 </div>
+                
             </div>
         </div>
         <div class="card-body">
@@ -58,5 +60,13 @@ $modalRoute = 'admin.php?page=a_jobs'; ?>
                 window.location = 'route.php?destroyJob=' + id;
             }
         })
+    }
+
+    function addJob(){
+        let job = prompt("Enter a new job name");
+        if(job){
+            console.log(job);
+            window.location = 'route.php?addJob='+job;
+        }
     }
 </script>

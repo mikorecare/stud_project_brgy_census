@@ -6,6 +6,6 @@
     unset($_SESSION['avatar']);
     unset($_SESSION['userType']);
     unset($_SESSION['step1']);
-
+    
     header('Location: index.php');
 ?>

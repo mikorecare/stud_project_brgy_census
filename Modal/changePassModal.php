@@ -1,7 +1,12 @@
-<!-- <?php $profile = $loginObj->showProfile(
+ <?php $profile = $loginObj->showProfile(
         isset($_SESSION['user_id']) ? $_SESSION['user_id'] : ''
       );
-      ?> -->
+      ?>
+<style>
+  input{
+    text-transform: none;
+  }
+</style>
 <div class="modal fade" id="changePassModal" tabindex="-1" aria-labelledby="changePassModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -21,27 +26,32 @@
                   document.querySelector('#avatarProduct').src = URL.createObjectURL(event.target.files[0]);
                 }
               }
+              
             </script>
           </div>
           <div class="mb-3">
             <label for="fName" class="form-label">First Name</label>
-            <input type="text" id="fName" name="fName" value="<?= $profile['f_name']; ?>" class="form-control" required />
+            <input type="text" id="fName" name="fName" value="<?= $profile['f_name']; ?>" class="form-control" readonly />
           </div>
           <div class="mb-3">
             <label for="lName" class="form-label">Last Name</label>
-            <input type="text" id="lName" name="lName" value="<?= $profile['l_name']; ?>" class="form-control" required />
+            <input type="text" id="lName" name="lName" value="<?= $profile['l_name']; ?>" class="form-control" readonly />
           </div>
           <div class="mb-3">
-            <label for="uName" class="form-label">Username</label>
-            <input type="text" id="uName" name="username" value="<?= $profile['username']; ?>" class="form-control" required />
+            <label for="mName" class="form-label">Middle Name</label>
+            <input type="text" id="mName" name="mName" value="<?= $profile['m_name']; ?>" class="form-control" readonly />
           </div>
           <div class="mb-3">
-            <label for="uName" class="form-label">Email</label>
-            <input type="email" id="uName" name="email" value="<?= $profile['email']; ?>" class="form-control" required />
+            <label for="username" class="form-label">Username</label>
+            <input type="text" id="username" name="username" value="<?= $profile['username']; ?>" class="form-control" required />
           </div>
           <div class="mb-3">
-            <label for="uName" class="form-label">Phone</label>
-            <input type="number" id="uName" name="phone" value="<?= $profile['phone']; ?>" class="form-control" required />
+            <label for="email" class="form-label">Email</label>
+            <input type="email" id="email" name="email" value="<?= $profile['email']; ?>" class="form-control" required />
+          </div>
+          <div class="mb-3">
+            <label for="phone" class="form-label">Phone</label>
+            <input type="number" id="phone" name="phone" value="<?= $profile['phone']; ?>" class="form-control" required />
           </div>
           <br>
           <label for="nPass" class="form-label">New Password</label>
