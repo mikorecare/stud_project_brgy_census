@@ -14,13 +14,12 @@
     include_once('loader.php');
     include_once('uploader.php');
     require 'vendor/autoload.php';
-    require 'get_oauth_token.php';
+
     use Classes\Credential;
     use Classes\Db;
 
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\Exception;
-    use League\OAuth2\Client\Provider\Google;
     $mail = new PHPMailer;
 
     $credential = new Credential();
@@ -31,10 +30,6 @@
     $settingObj = new Settings($conn);
     $objModel   = new Model($conn);
    
-    $refreshToken = getRefreshToken();
-
-    // Now, you can use $refreshToken as needed in route.php
-    echo 'Refresh Token in route.php: ', $refreshToken; 
     
     function UploaderFileTest($file)
     {
@@ -524,21 +519,13 @@
             $userEmail = $_GET['email'];
             $subject = 'Registration approval';
     
-            $mail = new PHPMailer;
-    
-            $mail->AuthType = 'XOAUTH2';
-            $mail->oauthUserEmail = 'miko.recare@cvsu.edu.ph'; // Your Gmail email
-            $mail->oauthClientId = '643320938803-9osuqe0eekq5d1fgn1mjur22jbhle2qh.apps.googleusercontent.com'; // Client ID from the Google Cloud Console
-            $mail->oauthClientSecret = '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'; // Client Secret from the Google Cloud Console
-            $mail->oauthRefreshToken = 'your_refresh_token'; // Refresh Token obtained during OAuth 2.0 authorization process
-    
             $mail->isSMTP();
     
             // SMTP settings
             $mail->Host = 'smtp.gmail.com';
             $mail->SMTPAuth = true;
             $mail->Username = 'miko.recare@cvsu.edu.ph'; 
-            $mail->Password = ''; 
+            $mail->Password = 'password'; 
             $mail->SMTPSecure = 'tls';
             $mail->Port = 587;
     
