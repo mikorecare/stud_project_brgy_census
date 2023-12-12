@@ -11,3 +11,5 @@
 -Go to your Google account and create an `App Password`
 
 -Change the `.env` file values with your `Gmail` and `App Password`
+
+## Make sure to check your `php.ini` file and check if openssl is commented like this `;extension=openssl`
